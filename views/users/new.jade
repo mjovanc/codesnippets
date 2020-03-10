@@ -1,0 +1,23 @@
+extends ../layout
+
+block register_user
+  .main.container
+    .row
+      .col-md-6.col-md-offset-3
+        h1.display-4.m-b-2 Register
+
+        if flash
+          div(class='alert alert-#{flash.type}')
+            div #{flash.text}
+
+        form(method='POST' action='/users/register' enctype="application/x-www-form-urlencoded")
+          div.form-group
+            label(for='username') Username:
+            input#username.form-control(type='text', placeholder='username' name='username')
+          div.form-group
+            label(for='email') Email:
+            input#email.form-control(type='email', placeholder='name@email.com' name='email')
+          div.form-group
+            label(for='password') Password:
+            input#password.form-control(type='password' name='password')
+          input.btn.btn-dark(type='submit' name='submit' value='Submit')

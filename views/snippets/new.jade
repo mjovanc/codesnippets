@@ -1,0 +1,20 @@
+extends ../layout
+
+block create_snippet
+  .main.container
+    .row
+      .col-md-12.col-md-offset-6
+        h1.display-4.m-b-2 Create new snippet
+
+        if flash
+          div(class='alert alert-#{flash.type}')
+            div #{flash.text}
+
+        form(method='POST' action='/snippets/create' enctype="application/x-www-form-urlencoded")
+          div.form-group
+            label(for='title') Title:
+            input#title.form-control(type='text', placeholder='title' name='title')
+          div.form-group
+            label(for='code') Code:
+            textarea(class='form-control' name='code' rows='20' cols='30' spellcheck='false')
+          input.btn.btn-dark(type='submit' name='submit' value='Submit')
