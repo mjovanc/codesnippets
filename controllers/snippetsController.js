@@ -13,6 +13,7 @@ const snippetsController = {}
 
 /**
  * Displays a list of snippets.
+ * A lot of code below was taken from Mats Lock demo and modified.
  *
  * @param {object} req - Express request object.
  * @param {object} res - Express response object.
@@ -25,8 +26,10 @@ snippetsController.index = async (req, res, next) => {
         .map(snippet => ({
           id: snippet._id,
           title: snippet.title,
-          code: snippet.code
+          code: snippet.code,
+          createdBy: snippet.createdBy
         }))
+        // .filter(cb => cb.createdBy === req.session.username) // checking if the snippet belongs to the session user
     }
     res.render('snippets/index', { viewData })
   } catch (error) {
@@ -64,7 +67,8 @@ snippetsController.view = async (req, res) => {
 snippetsController.new = async (req, res) => {
   const viewData = {
     title: '',
-    code: ''
+    code: '',
+    createdBy: ''
   }
   res.render('snippets/new', { viewData })
 }
@@ -79,7 +83,8 @@ snippetsController.create = async (req, res) => {
   try {
     const snippet = new Snippet({
       title: req.body.title,
-      code: req.body.code
+      code: req.body.code,
+      createdBy: req.session.username
     })
 
     await snippet.save()
@@ -189,6 +194,14 @@ snippetsController.delete = async (req, res) => {
  */
 snippetsController.authorize = async (req, res, next) => {
   if (!req.session.username) {
+    const error = new Error('Forbidden')
+    error.statusCode = 403
+    return next(error)
+  }
+
+  const snippet = await Snippet.findOne({ _id: req.params.id })
+
+  if (req.session.username !== snippet.createdBy) {
     const error = new Error('Forbidden')
     error.statusCode = 403
     return next(error)

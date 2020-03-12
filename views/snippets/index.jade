@@ -5,7 +5,8 @@ block index_snippet
   table.table
     thead
       tr
-        th(scope='col' class='w-75') Title
+        th(scope='col' class='w-50') Title
+        th(scope='col' class='w-25') Submitted by
         th(scope='col' clas='w-25') Action
     tbody
       each val in viewData.snippets
@@ -13,7 +14,9 @@ block index_snippet
           th(scope='row')
             a(href='/snippets/#{val.id}/edit' class='text-dark') #{val.title}
           td
+            p #{val.createdBy}
+          td
             a(href='/snippets/#{val.id}/view' class='px-2 btn btn-outline-dark mr-1') View
-            if username
+            if username == val.createdBy
               a(href='/snippets/#{val.id}/edit' class='px-2 btn btn-outline-warning mr-1') Edit
               a(href='/snippets/#{val.id}/remove' class='px-2 btn btn-outline-danger mr-1') Remove

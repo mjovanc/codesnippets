@@ -14,7 +14,8 @@ const SnippetSchema = new mongoose.Schema({
   code: {
     type: String,
     required: [true, "can't be blank"]
-  }
+  },
+  createdBy: String
 }, {
   timestamps: true,
   versionKey: false
